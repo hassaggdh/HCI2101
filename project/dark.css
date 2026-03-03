@@ -1,0 +1,134 @@
+* {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    /* خلفية داكنة جداً (فحمية) مريحة للشبكية */
+    background-color: #121212; 
+    /* لون نص رمادي فاتح (Opal) يمنع وهج القراءة */
+    color: #b0b8c1; 
+    max-width: 1100px;
+    margin: 2rem auto;
+    padding: 0 20px; 
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    margin: 0 auto 1.5rem auto;
+    max-width: 100%;
+    padding: 1rem 3rem;
+    
+    /* خلفية داكنة بلمسة زجاجية احترافية */
+    background-color: rgba(18, 18, 18, 0.85); 
+    backdrop-filter: blur(12px); 
+    
+    /* خط سفلي أزرق نيوني خافت */
+    border-bottom: 3px solid #3498db; 
+    border-radius: 0 0 8px 8px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+    padding: 1rem 0;
+}
+
+nav a {
+    text-decoration: none;
+    /* لون أزرق سماوي هادئ */
+    color: #5dade2; 
+    font-weight: 600;
+    transition: 0.3s;
+    padding: 5px 10px;
+}
+
+nav a:hover {
+    /* لون أبيض ناصع عند التمرير للتمييز */
+    color: #ffffff;
+    background-color: rgba(93, 173, 226, 0.1); 
+    border-radius: 4px;
+}
+
+/* تنسيق الجداول */
+.info-table, table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+    /* خلفية الخلايا داكنة */
+    background-color: #1e1e1e;
+    /* حدود رمادية داكنة جداً */
+    border: 1px solid #2c2c2c;
+}
+
+/* العناوين داخل الجداول */
+th {
+    /* أزرق غامق جداً للعناوين */
+    background-color: #2471a3;
+    color: #ffffff;
+    padding: 12px;
+    text-align: left;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #2c2c2c;
+}
+
+.info-table tr:nth-child(even) {
+    /* تمييز الصفوف بلون رمادي أفتح قليلاً */
+    background-color: #252525; 
+}
+
+/* تعديل كلاس الـ label */
+
+
+/* تنسيق العناوين البارزة */
+h3 {
+    /* لون النص أبيض */
+    color: #ffffff;
+    /* بنفسجي ملكي داكن */
+    background-color: #5b2c6f; 
+    /* حدود بنفسجية فاتحة من اليسار */
+    border-left: 8px solid #a569bd; 
+    padding: 12px 20px;
+    margin-top: 2.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: 5px;
+    display: inline-block;
+    min-width: 300px;
+    scroll-margin-top: 180px;
+}
+
+h2 {
+    /* لون نص فضي */
+    color: #e5e8e8;
+    margin: 2rem 0 1rem 0;
+    display: inline-block;
+    padding-bottom: 5px;
+    scroll-margin-top: 180px;   
+}
+@media screen and (max-width: 768px) {
+    nav ul {
+        flex-direction: column; /* تحويل الروابط من أفقي إلى عمودي */
+        align-items: center;    /* توسيط الروابط في نص الشاشة */
+        gap: 15px;              /* زيادة المسافة بين الروابط ليسهل الضغط بالإصبع */
+        padding: 20px 0;
+    }
+    /* هنا سنكتب التعديلات التي نريدها أن تظهر فقط في الجوال */
+.info-table {
+        display: block;        /* تحويل الجدول لنظام الكتل */
+        width: 100%;           /* يأخذ كامل عرض الشاشة */
+        overflow-x: auto;      /* إظهار شريط تمرير أفقي إذا كان الكلام عريضاً */
+        border-collapse: collapse;
+    }
+}
