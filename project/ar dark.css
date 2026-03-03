@@ -1,0 +1,116 @@
+* {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: #121212; 
+    color: #b0b8c1; 
+    max-width: 1100px;
+    margin: 2rem auto;
+    padding: 0 20px; 
+    
+    /* التعديل الأول: تحديد اتجاه الصفحة من اليمين لليسار */
+    direction: rtl; 
+    text-align: right; 
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    margin: 0 auto 1.5rem auto;
+    max-width: 100%;
+    padding: 1rem 3rem;
+    background-color: rgba(18, 18, 18, 0.85); 
+    backdrop-filter: blur(12px); 
+    border-bottom: 3px solid #3498db; 
+    border-radius: 0 0 8px 8px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+    padding: 1rem 0;
+}
+
+nav a {
+    text-decoration: none;
+    color: #5dade2; 
+    font-weight: 600;
+    transition: 0.3s;
+    padding: 5px 10px;
+}
+
+nav a:hover {
+    color: #ffffff;
+    background-color: rgba(93, 173, 226, 0.1); 
+    border-radius: 4px;
+}
+
+.info-table, table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+    background-color: #1e1e1e;
+    border: 1px solid #2c2c2c;
+}
+
+th {
+    background-color: #2471a3;
+    color: #ffffff;
+    padding: 12px;
+    
+    /* التعديل الثاني: محاذاة النص داخل العناوين لليمين */
+    text-align: right; 
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #2c2c2c;
+    /* تأكيد المحاذاة لليمين */
+    text-align: right; 
+}
+
+.info-table tr:nth-child(even) {
+    background-color: #252525; 
+}
+
+
+h3 {
+    color: #ffffff;
+    background-color: #5b2c6f; 
+    
+    /* التعديل الثالث: بما أن الاتجاه صار يمين، نغير الخط الملون ليكون على اليمين بدلاً من اليسار */
+    border-right: 8px solid #a569bd; 
+    border-left: none; 
+    
+    padding: 12px 20px;
+    margin-top: 2.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: 5px;
+    display: inline-block;
+    min-width: 300px;
+    scroll-margin-top: 180px;
+}
+
+h2 {
+    color: #e5e8e8;
+    margin: 2rem 0 1rem 0;
+    display: inline-block;
+    padding-bottom: 5px;
+    scroll-margin-top: 180px;   
+}
+.container {
+    width: 90%;            /* يأخذ 90% من عرض الشاشة في الجوال */
+    max-width: 1200px;     /* لا يتجاوز 1200px في الشاشات الكبيرة */
+    margin: 0 auto;        /* لتوسيط الحاوية في منتصف الصفحة */
+    padding: 20px;         /* مسافة داخلية اختيارية */
+}
