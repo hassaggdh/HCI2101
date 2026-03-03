@@ -1,0 +1,97 @@
+body {
+    background-color: #f0f2f5;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    direction: rtl;
+    margin: 0;
+    padding: 0;
+}
+
+/* شريط التنقل - موّسط تماماً */
+.navbar {
+    background-color: #ffffff;
+    height: 80px; /* قللنا الارتفاع ليكون أجمل */
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.team-section {
+    padding: 50px 20px;
+}
+
+.team-section h1 {
+    text-align: center;
+    color: #1c1e21;
+    margin-bottom: 40px;
+}
+
+.team-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.team-card {
+    background: #ffffff;
+    width: 260px;
+    padding: 25px;
+    border-radius: 20px;
+    text-align: center;
+    border: 1px solid #eee;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.team-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+}
+
+.team-card img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+    border: 5px solid #ffffff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.team-card h3 {
+    margin: 10px 0 5px 0;
+    color: #050505;
+    font-size: 1.2rem;
+}
+
+.team-card .email {
+    color: #65676b;
+    font-size: 0.9rem;
+}
+@media screen and (max-width: 768px) {
+    nav ul {
+        flex-direction: column; /* تحويل الروابط من أفقي إلى عمودي */
+        align-items: center;    /* توسيط الروابط في نص الشاشة */
+        gap: 15px;              /* زيادة المسافة بين الروابط ليسهل الضغط بالإصبع */
+        padding: 20px 0;
+    }
+    /* هنا سنكتب التعديلات التي نريدها أن تظهر فقط في الجوال */
+.info-table {
+        display: block;        /* تحويل الجدول لنظام الكتل */
+        width: 100%;           /* يأخذ كامل عرض الشاشة */
+        overflow-x: auto;      /* إظهار شريط تمرير أفقي إذا كان الكلام عريضاً */
+        border-collapse: collapse;
+    }
+}
