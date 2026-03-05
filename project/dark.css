@@ -117,18 +117,59 @@ h2 {
     padding-bottom: 5px;
     scroll-margin-top: 180px;   
 }
+/* التنسيق الأساسي لزر الهمبرقر (نفس السابق) */
+.menu-toggle {
+    display: none; /* مخفي في الديسك توب */
+    flex-direction: column;
+    cursor: pointer;
+    gap: 5px;
+    z-index: 1001;
+}
+
+.bar {
+    width: 25px;
+    height: 3px;
+    background-color: #5dade2;
+    transition: 0.3s;
+}
+
 @media screen and (max-width: 768px) {
-    nav ul {
-        flex-direction: column; /* تحويل الروابط من أفقي إلى عمودي */
-        align-items: center;    /* توسيط الروابط في نص الشاشة */
-        gap: 15px;              /* زيادة المسافة بين الروابط ليسهل الضغط بالإصبع */
-        padding: 20px 0;
+    header {
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 1rem 20px;
     }
-    /* هنا سنكتب التعديلات التي نريدها أن تظهر فقط في الجوال */
-.info-table {
-        display: block;        /* تحويل الجدول لنظام الكتل */
-        width: 100%;           /* يأخذ كامل عرض الشاشة */
-        overflow-x: auto;      /* إظهار شريط تمرير أفقي إذا كان الكلام عريضاً */
-        border-collapse: collapse;
+
+    .menu-toggle {
+        display: flex; /* يظهر في الجوال */
+    }
+
+    nav ul {
+        display: none; /* القائمة مخفية في البداية */
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: rgba(18, 18, 18, 0.95);
+        border-bottom: 2px solid #3498db;
+        padding: 20px 0;
+        text-align: center;
+    }
+
+    /* السحر هنا: إذا كان الـ checkbox مفعل، اظهر القائمة التي تلي الـ nav */
+    #menu-bar:checked ~ nav ul {
+        display: flex;
+    }
+
+    /* حركة اختيارية: تحويل الشرطات لـ X عند الضغط */
+    #menu-bar:checked ~ .menu-toggle .bar:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+    #menu-bar:checked ~ .menu-toggle .bar:nth-child(2) {
+        opacity: 0;
+    }
+    #menu-bar:checked ~ .menu-toggle .bar:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
     }
 }
