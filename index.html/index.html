@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مذكراتي</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="logo">🌙 مذكراتي</div>
+    <div class="status-bar">
+      <span id="statusDot" class="status-dot offline"></span>
+      <span id="statusText">جارٍ الاتصال...</span>
+      <span class="demo-badge" id="demoBadge">☁️</span>
+    </div>
+  </header>
+
+  <div class="main">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <span class="sidebar-title">الملاحظات</span>
+        <button class="btn-new" onclick="newNote()">+ جديدة</button>
+      </div>
+      <div class="search-wrap">
+        <input type="text" id="searchInput" class="search-input"
+          placeholder="🔍 بحث..." oninput="searchNotes(this.value)">
+      </div>
+      <div class="notes-list" id="notesList"></div>
+    </aside>
+
+    <div class="editor-pane">
+      <div class="empty-state" id="emptyState">
+        <div class="empty-icon">📝</div>
+        <div class="empty-title">لا توجد ملاحظة مفتوحة</div>
+        <div class="empty-sub">اختر ملاحظة أو أنشئ واحدة جديدة</div>
+        <button class="btn-new" style="margin-top:16px" onclick="newNote()">+ ملاحظة جديدة</button>
+      </div>
+
+      <div id="editorContainer" class="editor-container hidden">
+        <div class="toolbar">
+          <button class="tool-btn" onclick="fmt('bold')"><b>ع</b></button>
+          <button class="tool-btn" onclick="fmt('italic')"><i style="font-style:italic">ع</i></button>
+          <button class="tool-btn" onclick="fmt('underline')"><u>ع</u></button>
+          <button class="tool-btn" onclick="fmt('strikeThrough')"><s>ع</s></button>
+          <div class="tool-sep"></div>
+          <button class="tool-btn" onclick="fmt('formatBlock','h2')">H1</button>
+          <button class="tool-btn" onclick="fmt('formatBlock','h3')">H2</button>
+          <button class="tool-btn" onclick="fmt('formatBlock','p')">¶</button>
+          <div class="tool-sep"></div>
+          <button class="tool-btn" onclick="fmt('insertUnorderedList')">☰</button>
+          <button class="tool-btn" onclick="fmt('insertOrderedList')">①</button>
+          <div class="tool-sep"></div>
+          <select class="tool-select" onchange="fmt('fontSize',this.value);this.value='3'">
+            <option value="3">حجم الخط</option>
+            <option value="1">صغير جداً</option>
+            <option value="2">صغير</option>
+            <option value="3">عادي</option>
+            <option value="4">كبير</option>
+            <option value="5">كبير جداً</option>
+          </select>
+          <div class="tool-sep"></div>
+          <button class="tool-btn danger" onclick="deleteNote()">🗑 حذف</button>
+        </div>
+
+        <input type="text" class="note-title-input" id="noteTitle"
+          placeholder="عنوان الملاحظة..." oninput="onEdit()">
+
+        <div class="editor-area">
+          <div id="editor" contenteditable="true"
+            oninput="onEdit()" onkeydown="handleKey(event)"
+            data-placeholder="ابدأ الكتابة هنا..."></div>
+        </div>
+
+        <div class="audio-section">
+          <div class="audio-header">🎙 التسجيلات الصوتية</div>
+          <div class="audio-recorder">
+            <button class="btn-record" id="recordBtn" onclick="toggleRecord()">
+              <span class="rec-dot"></span>
+              <span id="recordLabel">بدء التسجيل</span>
+            </button>
+            <span class="rec-timer" id="recTimer">00:00</span>
+          </div>
+          <div class="audio-clips" id="audioClips"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
