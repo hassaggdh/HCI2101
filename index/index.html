@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>مذكرتي - مذكرة المواد</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="authBox" class="auth-box">
+  <div class="auth-card">
+    <h2>تسجيل الدخول</h2>
+    <p>ادخل بحسابك لحفظ مذكرتك</p>
+
+    <input id="emailInput" type="email" placeholder="البريد الإلكتروني">
+    <input id="passwordInput" type="password" placeholder="كلمة المرور">
+
+    <button id="loginBtn">تسجيل الدخول</button>
+    <button id="registerBtn">إنشاء حساب جديد</button>
+
+    <p id="authMessage"></p>
+  </div>
+</div>
+
+<div id="appBox" style="display:none;">
+    <div class="app">
+      <header class="topbar">
+        <div class="top-actions">
+          <button
+            class="burger"
+            id="toggleSubjects"
+            title="فتح وإغلاق قائمة المواد"
+            aria-label="قائمة المواد"
+          >
+            <span></span>
+          </button>
+          <div class="brand">
+            <span class="moon">🌙</span><span>مذكرتي</span>
+          </div>
+        </div>
+        <div class="top-actions">
+          <div class="sync">
+            <strong>FIREBASE</strong><span id="saveState">محفوظ محلياً</span
+            ><span class="dot"></span>
+          </div>
+          <button
+            class="burger"
+            id="toggleInspector"
+            title="فتح وإغلاق الأدوات الجانبية"
+            aria-label="الأدوات الجانبية"
+          >
+            <span></span>
+          </button>
+        </div>
+      </header>
+      <div class="layout">
+        <aside>
+          <div class="side-head">
+            <h2>المواد</h2>
+            <button class="gold-btn" id="addSubject">+ مادة</button>
+          </div>
+          <div class="search">
+            <input id="search" placeholder="ابحث عن مادة..." />
+          </div>
+          <div class="subjects" id="subjects"></div>
+        </aside>
+        <main>
+          <nav class="toolbar" aria-label="أدوات النص">
+            <input
+              class="title-input"
+              id="noteTitle"
+              placeholder="عنوان المذكرة"
+            />
+            <span class="sep"></span>
+            <button class="tool" data-cmd="bold" title="عريض"><b>B</b></button>
+            <button class="tool" data-cmd="italic" title="مائل">
+              <i>I</i>
+            </button>
+            <button class="tool" data-cmd="underline" title="تحته خط">
+              <u>U</u>
+            </button>
+            <button class="tool" data-cmd="insertUnorderedList" title="قائمة">
+              •
+            </button>
+            <button class="tool" data-cmd="justifyRight" title="يمين">≡</button>
+            <button class="tool" data-cmd="justifyCenter" title="وسط">≣</button>
+            <button class="tool" data-cmd="justifyLeft" title="يسار">≡</button>
+            <span class="sep"></span>
+            <select id="format">
+              <option value="p">نص عادي</option>
+              <option value="h1">H1</option>
+              <option value="h2">H2</option>
+              <option value="blockquote">اقتباس</option>
+            </select>
+            <select id="fontSize">
+              <option value="3">حجم الخط</option>
+              <option value="2">صغير</option>
+              <option value="3">متوسط</option>
+              <option value="5">كبير</option>
+              <option value="7">ضخم</option>
+            </select>
+            <button class="tool" id="saveBtn" title="حفظ">💾</button>
+            <button class="tool" id="printBtn" title="طباعة إطار النص">
+              🖨️
+            </button>
+            <button class="tool danger" id="deleteBtn" title="حذف">حذف</button>
+          </nav>
+          <section class="canvas">
+            <article class="paper">
+              <h1 class="note-title" id="visualTitle">مرحباً بك 👋</h1>
+              <div id="editor" contenteditable="true" spellcheck="false"></div>
+            </article>
+          </section>
+          <footer class="bottom">
+            <div class="stats">
+              <span id="wordCount">0 كلمة</span><span id="charCount">0 حرف</span
+              ><span id="updatedAt">لم يتم التعديل بعد</span>
+            </div>
+            <div class="rec">
+              <button id="recordBtn" type="button">
+                <i></i><span id="recordLabel">بدء التسجيل</span></button
+              ><span class="record-status" id="recordStatus">جاهز</span
+              ><button id="exportBtn"><i></i> تصدير TXT</button>
+            </div>
+          </footer>
+        </main>
+        <section class="inspector">
+          <div class="card">
+            <h3>قوالب سريعة</h3>
+            <button class="template" data-template="summary">ملخص الدرس</button
+            ><button class="template" data-template="tasks">واجبات ومهام</button
+            ><button class="template" data-template="questions">
+              أسئلة للمراجعة
+            </button>
+          </div>
+          <div class="card">
+            <h3>لون المادة</h3>
+            <div class="palette" id="palette"></div>
+          </div>
+          <div class="card">
+            <h3>معلومة</h3>
+            <p style="color: var(--muted); line-height: 1.8; margin: 0">
+              كل شيء يُحفظ تلقائياً داخل المتصفح. التصميم جاهز للتطوير وربطه
+              لاحقاً بقاعدة بيانات.
+            </p>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div class="toast" id="toast">تم الحفظ</div>
+    </div>
+    <script type="module" src="script.js"></script>
+  </body>
+</html>
