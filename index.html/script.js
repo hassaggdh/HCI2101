@@ -1,3 +1,35 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBHGxP7CzjpXh2cHrFin0EKSG42KVR4qpw",
+  authDomain: "my-notes-app-b21a8.firebaseapp.com",
+  projectId: "my-notes-app-b21a8",
+  storageBucket: "my-notes-app-b21a8.firebasestorage.app",
+  messagingSenderId: "783787952283",
+  appId: "1:783787952283:web:9542387d58ce488bd25e3e",
+  measurementId: "G-93R76E1954"
+};
+
+const firebaseApp = initializeApp(firebaseConfig);
+const auth = getAuth(firebaseApp);
+const db = getFirestore(firebaseApp);
+
+let currentUser = null;
 "use strict";
 const STORE_KEY = "pro_arabic_notes_v1";
 const colors = [
@@ -19,7 +51,7 @@ const templates = {
     "<h2>أسئلة للمراجعة</h2><ol><li>ما أهم نقطة في الدرس؟</li><li>ما الجزء الذي يحتاج مراجعة؟</li><li>كيف أطبق الفكرة على مثال؟</li></ol>",
 };
 const $ = (selector) => document.querySelector(selector);
-const app = $(".app");
+const appUI = $(".app");
 const subjectsEl = $("#subjects");
 const editor = $("#editor");
 const titleInput = $("#noteTitle");
@@ -142,6 +174,8 @@ function loadState() {
 }
 function persist() {
   localStorage.setItem(STORE_KEY, JSON.stringify(state));
+  saveUserNote();
+
   $("#saveState").textContent = "تم الحفظ الآن";
   toast.classList.add("show");
   window.setTimeout(() => toast.classList.remove("show"), 1200);
@@ -354,16 +388,16 @@ function handleEditorDrop(event) {
 function togglePanel(panel) {
   const isMobile = window.matchMedia("(max-width:760px)").matches;
   if (panel === "subjects") {
-    app.classList.toggle(isMobile ? "show-subjects-mobile" : "hide-subjects");
+    appUI.classList.toggle(isMobile ? "show-subjects-mobile" : "hide-subjects");
   } else {
-    app.classList.toggle(isMobile ? "show-inspector-mobile" : "hide-inspector");
+    appUI.classList.toggle(isMobile ? "show-inspector-mobile" : "hide-inspector");
   }
 }
 $("#toggleSubjects").addEventListener("click", () => togglePanel("subjects"));
 $("#toggleInspector").addEventListener("click", () => togglePanel("inspector"));
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
-    app.classList.remove("show-subjects-mobile", "show-inspector-mobile");
+    appUI.classList.remove("show-subjects-mobile", "show-inspector-mobile");
   }
 });
 
@@ -421,11 +455,7 @@ editor.addEventListener("input", () => {
   updateStats();
   scheduleSave();
 });
-editor.addEventListener("paste", handleEditorPaste);
-editor.addEventListener("drop", handleEditorDrop);
-editor.addEventListener("dragover", (event) => event.preventDefault());
-editor.addEventListener("keyup", updateToolState);
-editor.addEventListener("mouseup", updateToolState);
+
 document
   .querySelectorAll("[data-cmd]")
   .forEach((btn) =>
@@ -464,3 +494,73 @@ $("#exportBtn").addEventListener("click", () => {
 window.addEventListener("beforeunload", syncActive);
 renderAll();
 persist();
+const authBox = document.getElementById("authBox");
+const appBox = document.getElementById("appBox");
+const emailInput = document.getElementById("emailInput");
+const passwordInput = document.getElementById("passwordInput");
+const authMessage = document.getElementById("authMessage");
+
+document.getElementById("registerBtn").addEventListener("click", async () => {
+  authMessage.textContent = "";
+
+  try {
+    await createUserWithEmailAndPassword(
+      auth,
+      emailInput.value,
+      passwordInput.value
+    );
+  } catch (error) {
+    authMessage.textContent = "تعذر إنشاء الحساب: " + error.message;
+  }
+});
+
+document.getElementById("loginBtn").addEventListener("click", async () => {
+  authMessage.textContent = "";
+
+  try {
+    await signInWithEmailAndPassword(
+      auth,
+      emailInput.value,
+      passwordInput.value
+    );
+  } catch (error) {
+    authMessage.textContent = "تعذر تسجيل الدخول: " + error.message;
+  }
+});
+
+async function saveUserNote() {
+  if (!currentUser) return;
+
+  syncActive();
+
+  await setDoc(doc(db, "notes", currentUser.uid), {
+    state: state,
+    updatedAt: new Date()
+  });
+}
+async function loadUserNote() {
+  if (!currentUser) return;
+
+  const snap = await getDoc(doc(db, "notes", currentUser.uid));
+
+  if (snap.exists() && snap.data().state) {
+    state = snap.data().state;
+    activeId = state.activeId || state.subjects[0]?.id;
+    renderAll();
+  }
+}
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    currentUser = user;
+
+    authBox.style.display = "none";
+    appBox.style.display = "block";
+
+    await loadUserNote(); // 🔥 مهم
+  } else {
+    currentUser = null;
+
+    authBox.style.display = "grid";
+    appBox.style.display = "none";
+  }
+});
