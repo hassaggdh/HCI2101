@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>مذكرتي - مذكرة المواد</title>
+    <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.css" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -111,8 +112,51 @@
               <div id="editor" contenteditable="true" spellcheck="false"></div>
             </article>
           </section>
-          <footer class="bottom">
+<div class="toast" id="toast">تم الحفظ</div>
+
+<button id="timerTab" class="timer-tab">⏱️ مؤقت</button>
+
+<div id="timerModal" class="timer-modal">
+  <div class="timer-card">
+    <button id="closeTimer" class="timer-close">×</button>
+
+    <div class="timer-controls">
+      <button id="decreaseTimer">−</button>
+<input id="timerInput" class="timer-input" type="number" min="1" value="5">      <button id="increaseTimer">+</button>
+    </div>
+
+    <div id="timerDisplay" class="timer-display">05:00</div>
+
+    <div class="timer-actions">
+      <button id="resetTimer" class="timer-reset">↻</button>
+      <button id="startTimer" class="timer-start">▶</button>
+    </div>
+
+    <p id="timerStatus" class="timer-status">جاهز للبدء</p>
+  </div>
+</div>
+<div id="timerModal" class="timer-modal">
+  <div class="timer-card">
+    <button id="closeTimer" class="timer-close">×</button>
+
+    <div class="timer-controls">
+      <button id="decreaseTimer">−</button>
+      <span id="timerMinutesLabel">5 دقائق</span>
+      <button id="increaseTimer">+</button>
+    </div>
+
+    <div id="timerDisplay" class="timer-display">05:00</div>
+
+    <div class="timer-actions">
+      <button id="resetTimer" class="timer-reset">↻</button>
+      <button id="startTimer" class="timer-start">▶</button>
+    </div>
+
+    <p id="timerStatus" class="timer-status">جاهز للبدء</p>
+  </div>
+</div>
             <div class="stats">
+
               <span id="wordCount">0 كلمة</span><span id="charCount">0 حرف</span
               ><span id="updatedAt">لم يتم التعديل بعد</span>
             </div>
@@ -148,6 +192,10 @@
       </div>
     </div>
     <div class="toast" id="toast">تم الحفظ</div>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs/prism.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-javascript.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-css.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-markup.min.js"></script>
     </div>
     <script type="module" src="script.js"></script>
   </body>
