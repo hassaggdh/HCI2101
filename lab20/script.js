@@ -454,6 +454,7 @@ titleInput.addEventListener("input", () => {
 editor.addEventListener("input", () => {
   updateStats();
   scheduleSave();
+  highlightCodeBlocks();
 });
 
 document
@@ -547,6 +548,7 @@ async function loadUserNote() {
     state = snap.data().state;
     activeId = state.activeId || state.subjects[0]?.id;
     renderAll();
+    highlightCodeBlocks();
   }
 }
 onAuthStateChanged(auth, async (user) => {
@@ -564,3 +566,157 @@ onAuthStateChanged(auth, async (user) => {
     appBox.style.display = "none";
   }
 });
+let timerMinutes = 5;
+let timerSecondsLeft = timerMinutes * 60;
+let timerInterval = null;
+let timerRunning = false;
+
+const timerModal = document.getElementById("timerModal");
+const timerTab = document.getElementById("timerTab");
+const closeTimer = document.getElementById("closeTimer");
+const increaseTimer = document.getElementById("increaseTimer");
+const decreaseTimer = document.getElementById("decreaseTimer");
+const timerInput = document.getElementById("timerInput");
+const timerDisplay = document.getElementById("timerDisplay");
+const startTimer = document.getElementById("startTimer");
+const resetTimer = document.getElementById("resetTimer");
+const timerStatus = document.getElementById("timerStatus");
+
+function updateTimerUI() {
+  const minutes = String(Math.floor(timerSecondsLeft / 60)).padStart(2, "0");
+  const seconds = String(timerSecondsLeft % 60).padStart(2, "0");
+  timerDisplay.textContent = `${minutes}:${seconds}`;
+  timerInput.value = timerMinutes;
+}
+
+function setTimerMinutes(value) {
+  if (timerRunning) return;
+
+  const minutes = Number(value);
+
+  if (!Number.isFinite(minutes) || minutes < 1) {
+    timerMinutes = 1;
+  } else {
+    timerMinutes = Math.floor(minutes);
+  }
+
+  timerSecondsLeft = timerMinutes * 60;
+  updateTimerUI();
+}
+
+function playTimerAlert() {
+  const audioCtx = new AudioContext();
+  const oscillator = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+
+  oscillator.type = "sine";
+  oscillator.frequency.value = 880;
+  gain.gain.value = 0.25;
+
+  oscillator.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  oscillator.start();
+
+  setTimeout(() => {
+    oscillator.frequency.value = 660;
+  }, 250);
+
+  setTimeout(() => {
+    oscillator.stop();
+    audioCtx.close();
+  }, 1200);
+}
+
+function finishTimer() {
+  clearInterval(timerInterval);
+  timerRunning = false;
+  startTimer.textContent = "▶";
+  timerStatus.textContent = "انتهى الوقت";
+  playTimerAlert();
+}
+
+function startOrPauseTimer() {
+  if (timerRunning) {
+    clearInterval(timerInterval);
+    timerRunning = false;
+    startTimer.textContent = "▶";
+    timerStatus.textContent = "متوقف مؤقتاً";
+    return;
+  }
+
+  if (timerSecondsLeft <= 0) {
+    timerSecondsLeft = timerMinutes * 60;
+  }
+
+  timerRunning = true;
+  startTimer.textContent = "⏸";
+  timerStatus.textContent = "المؤقت يعمل";
+
+  timerInterval = setInterval(() => {
+    timerSecondsLeft--;
+
+    if (timerSecondsLeft <= 0) {
+      timerSecondsLeft = 0;
+      updateTimerUI();
+      finishTimer();
+      return;
+    }
+
+    updateTimerUI();
+  }, 1000);
+}
+
+timerTab.addEventListener("click", () => {
+  timerModal.classList.toggle("show");
+
+  if (timerModal.classList.contains("show")) {
+    timerInput.focus();
+    timerInput.select();
+  }
+});
+
+closeTimer.addEventListener("click", () => {
+  timerModal.classList.remove("show");
+});
+
+increaseTimer.addEventListener("click", () => {
+  setTimerMinutes(timerMinutes + 1);
+});
+
+decreaseTimer.addEventListener("click", () => {
+  setTimerMinutes(timerMinutes - 1);
+});
+
+timerInput.addEventListener("input", () => {
+  setTimerMinutes(timerInput.value);
+});
+
+timerInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    startOrPauseTimer();
+  }
+
+  if (event.key === "ArrowUp") {
+    event.preventDefault();
+    setTimerMinutes(timerMinutes + 1);
+  }
+
+  if (event.key === "ArrowDown") {
+    event.preventDefault();
+    setTimerMinutes(timerMinutes - 1);
+  }
+});
+
+startTimer.addEventListener("click", startOrPauseTimer);
+
+resetTimer.addEventListener("click", () => {
+  clearInterval(timerInterval);
+  timerRunning = false;
+  timerSecondsLeft = timerMinutes * 60;
+  startTimer.textContent = "▶";
+  timerStatus.textContent = "جاهز للبدء";
+  updateTimerUI();
+});
+
+updateTimerUI();
