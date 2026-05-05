@@ -796,3 +796,121 @@ select,
   margin-top: 12px;
   color: #fca5a5;
 }
+.timer-modal {
+  position: fixed;
+  right: 28px;
+  bottom: 82px;
+  display: none;
+  z-index: 9999;
+}
+
+.timer-modal.show {
+  display: block;
+}
+
+.timer-card {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, #171923 0%, #11131b 58%, #2a2d36 60%, #151720 100%);
+  border: 9px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.55);
+  color: rgb(255, 255, 255);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  padding: 18px;
+  box-sizing: border-box;
+}
+
+.timer-close {
+  position: absolute;
+  top: -48px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(255,255,255,0.12);
+  color: rgb(255, 255, 255);
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.timer-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 150px;
+  background: rgba(255,255,255,0.08);
+  padding: 7px 10px;
+  border-radius: 999px;
+}
+
+.timer-controls button {
+  border: none;
+  background: transparent;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.timer-input {
+  width: 58px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: white;
+  text-align: center;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.timer-display {
+  font-size: 42px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  border-bottom: 4px solid #8b5cf6;
+  line-height: 1;
+}
+
+.timer-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.timer-actions button {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.18);
+  color: white;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.timer-reset {
+  background: rgba(255,255,255,0.08);
+}
+
+.timer-start {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+}
+
+.timer-status {
+  color: rgba(255,255,255,0.65);
+  font-size: 12px;
+  margin: 0;
+}
+.timer-tab {
+  background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+  color: white;
+}
