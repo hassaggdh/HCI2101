@@ -326,54 +326,78 @@ function escapeAttribute(text) {
 function imageHtml(src, caption) {
   const safeCaption = caption ? escapeText(caption) : "صورة مضافة داخل المذكرة";
   const safeSrc = escapeAttribute(src);
+
   return (
-    '<figure class=\"image-note\" contenteditable=\"false\"><img src=\"' +
-    safeSrc +
-    '\" alt=\"' +
-    safeCaption +
-    '\" loading=\"lazy\"><figcaption>' +
-    safeCaption +
-    "</figcaption></figure><p><br></p>"
+    '<figure class="image-note" contenteditable="false">' +
+      '<button type="button" class="image-delete">×</button>' +
+      '<div class="image-resize-box">' +
+        '<img src="' + safeSrc + '" alt="' + safeCaption + '" loading="lazy">' +
+        '<span class="resize-handle top-left"></span>' +
+        '<span class="resize-handle top-right"></span>' +
+        '<span class="resize-handle bottom-left"></span>' +
+        '<span class="resize-handle bottom-right"></span>' +
+      '</div>' +
+    '</figure>' +
+    '<p><br></p>'
   );
 }
+
 function insertImageFile(file) {
   if (!file || !file.type || !file.type.startsWith("image/")) return;
+
   const reader = new FileReader();
+
   reader.addEventListener("load", () => {
     insertHtmlInsideEditor(
-      imageHtml(reader.result, file.name || "صورة من الحافظة"),
+      imageHtml(reader.result, file.name || "صورة من الحافظة")
     );
   });
+
   reader.readAsDataURL(file);
 }
+function detectCodeLanguage(text) {
+  if (/<\/?[a-z][\s\S]*>/i.test(text)) return "markup";
+  if (/[{};]/.test(text) && /(\.|#|body|display|color|background|margin|padding)/i.test(text)) return "css";
+  if (/(function|const|let|var|=>|console\.log|document\.|addEventListener)/.test(text)) return "javascript";
+  return null;
+}
+
 function handleEditorPaste(event) {
   const clipboard = event.clipboardData;
   if (!clipboard) return;
+
   const imageFiles = Array.from(clipboard.files || []).filter((file) =>
-    file.type.startsWith("image/"),
+    file.type.startsWith("image/")
   );
+
   if (imageFiles.length) {
     event.preventDefault();
     imageFiles.forEach(insertImageFile);
     return;
   }
-  const html = clipboard.getData("text/html");
-  if (html && /<img[\s\S]*?>/i.test(html)) {
+
+  const plainText = clipboard.getData("text/plain");
+  const language = detectCodeLanguage(plainText);
+
+  if (plainText && language) {
     event.preventDefault();
-    const doc = new DOMParser().parseFromString(html, "text/html");
-    const images = Array.from(doc.images)
-      .map((img) => img.currentSrc || img.src)
-      .filter(Boolean);
-    if (images.length) {
-      images.forEach((src, index) =>
-        insertHtmlInsideEditor(imageHtml(src, "صورة ملصقة " + (index + 1))),
-      );
-    } else {
-      const text = clipboard.getData("text/plain");
-      if (text) document.execCommand("insertText", false, text);
-    }
+
+    insertHtmlInsideEditor(
+      `<pre><code class="language-${language}">${escapeText(plainText)}</code></pre><p><br></p>`
+    );
+
+    highlightCodeBlocks();
+    return;
+  }
+
+  if (plainText) {
+    event.preventDefault();
+    document.execCommand("insertText", false, plainText);
+    updateStats();
+    scheduleSave();
   }
 }
+
 function handleEditorDrop(event) {
   const files = Array.from(
     event.dataTransfer && event.dataTransfer.files
@@ -451,11 +475,20 @@ titleInput.addEventListener("input", () => {
   visualTitle.textContent = titleInput.value || "بدون عنوان";
   scheduleSave();
 });
+function highlightCodeBlocks() {
+  if (window.Prism) {
+    Prism.highlightAll();
+  }
+}
 editor.addEventListener("input", () => {
   updateStats();
   scheduleSave();
   highlightCodeBlocks();
 });
+
+editor.addEventListener("paste", handleEditorPaste);
+editor.addEventListener("drop", handleEditorDrop);
+editor.addEventListener("dragover", (event) => event.preventDefault());
 
 document
   .querySelectorAll("[data-cmd]")
@@ -720,3 +753,80 @@ resetTimer.addEventListener("click", () => {
 });
 
 updateTimerUI();
+let resizingImage = null;
+let startX = 0;
+let startWidth = 0;
+
+editor.addEventListener("click", (event) => {
+  const imageNote = event.target.closest(".image-note");
+
+  document.querySelectorAll(".image-note.selected").forEach((item) => {
+    item.classList.remove("selected");
+  });
+
+  if (imageNote) {
+    imageNote.classList.add("selected");
+  }
+});
+
+editor.addEventListener("click", (event) => {
+  const deleteBtn = event.target.closest(".image-delete");
+  if (!deleteBtn) return;
+
+  const figure = deleteBtn.closest(".image-note");
+  figure.remove();
+  scheduleSave();
+});
+
+editor.addEventListener("mousedown", (event) => {
+  const handle = event.target.closest(".resize-handle");
+  if (!handle) return;
+
+  event.preventDefault();
+
+  const figure = handle.closest(".image-note");
+  const img = figure.querySelector("img");
+
+  resizingImage = img;
+  startX = event.clientX;
+  startWidth = img.getBoundingClientRect().width;
+
+  figure.classList.add("selected");
+});
+
+document.addEventListener("mousemove", (event) => {
+  if (!resizingImage) return;
+
+  const diff = event.clientX - startX;
+  const maxWidth = editor.clientWidth - 40;
+  const newWidth = Math.max(120, Math.min(startWidth + diff, maxWidth));
+
+  resizingImage.style.width = newWidth + "px";
+});
+
+document.addEventListener("mouseup", () => {
+  if (!resizingImage) return;
+
+  resizingImage = null;
+  scheduleSave();
+});
+document.getElementById("codeBtn").addEventListener("click", () => {
+  const selection = window.getSelection();
+  const selectedText = selection.toString();
+
+  if (!selectedText.trim()) {
+    alert("حدد الكود أولاً");
+    return;
+  }
+
+  const safeCode = escapeText(selectedText);
+
+  document.execCommand(
+    "insertHTML",
+    false,
+    `<pre><code class="language-markup">${safeCode}</code></pre><p><br></p>`
+  );
+
+  highlightCodeBlocks();
+  scheduleSave();
+});
