@@ -274,6 +274,9 @@ main {
   border-bottom: 1px solid var(--border);
   background: rgba(17, 18, 23, 0.8);
   overflow-x: auto;
+    position: sticky;
+  top: 68px;
+  z-index: 30;
 }
 .toolbar .sep {
   width: 1px;
@@ -913,4 +916,124 @@ select,
 .timer-tab {
   background: linear-gradient(135deg, #8b5cf6, #06b6d4);
   color: white;
+}
+.image-note {
+  position: relative;
+  display: block;
+  max-width: 100%;
+  margin: 18px 0;
+  text-align: center;
+}
+
+.image-note img {
+  max-width: 100%;
+  width: 420px;
+  height: auto;
+  border-radius: 16px;
+  display: block;
+  margin: 0 auto;
+}
+
+.image-note.selected {
+  outline: 2px solid #8b5cf6;
+  outline-offset: 6px;
+  border-radius: 18px;
+}
+.image-note {
+  position: relative;
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  margin: 22px auto;
+  text-align: center;
+}
+
+.image-resize-box {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+}
+
+.image-note img {
+  width: 420px;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 16px;
+}
+
+.image-note.selected .image-resize-box {
+  outline: 2px solid #8b5cf6;
+  outline-offset: 6px;
+  border-radius: 18px;
+}
+
+.resize-handle {
+  display: none;
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: #8b5cf6;
+  border: 2px solid white;
+  border-radius: 50%;
+  z-index: 10;
+}
+
+.image-note.selected .resize-handle {
+  display: block;
+}
+
+.resize-handle.top-left {
+  top: -8px;
+  left: -8px;
+  cursor: nwse-resize;
+}
+
+.resize-handle.top-right {
+  top: -8px;
+  right: -8px;
+  cursor: nesw-resize;
+}
+
+.resize-handle.bottom-left {
+  bottom: -8px;
+  left: -8px;
+  cursor: nesw-resize;
+}
+
+.resize-handle.bottom-right {
+  bottom: -8px;
+  right: -8px;
+  cursor: nwse-resize;
+}
+
+.image-delete {
+  display: none;
+  position: absolute;
+  top: -42px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
+  background: #ef4444;
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+  z-index: 20;
+}
+
+.image-note.selected .image-delete {
+  display: block;
+}
+#editor {
+  unicode-bidi: plaintext;
+}
+
+#editor p,
+#editor div,
+#editor li,
+#editor blockquote {
+  unicode-bidi: plaintext;
 }
