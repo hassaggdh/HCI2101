@@ -1037,3 +1037,10 @@ select,
 #editor blockquote {
   unicode-bidi: plaintext;
 }
+#editor pre,
+#editor code,
+#editor pre code {
+  direction: ltr !important;
+  text-align: left !important;
+  unicode-bidi: isolate !important;
+}
